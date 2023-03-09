@@ -1,0 +1,16 @@
+.contactsListItem {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0.7rem 1rem;
+  &:hover {
+    background-color: rgb(243, 239, 239);
+    cursor: pointer;
+  }
+}
+
+.avatarWrapper {
+  height: 3rem;
+  width: 3rem;
+  margin-right: 1rem;
+}
