@@ -16,9 +16,7 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
     try {
-      const user = env.nodeEnv !== "test" 
-        ? await createUser(req.body)
-        : await jest.fn()
+      const user = await createUser(req.body)
       if(!user) {
         return res.status(401).send('error, user not created')
       }
@@ -27,6 +25,19 @@ router.post('/', async (req, res) => {
       return res.status(500).send(err.name + ': ' + err.message)
     }
   }
+)
+
+router.patch('/:userId', async (req, res) => {
+  try {
+    const user = await updateUser(req.params.userId, req.body)
+    if(!user) {
+      return res.status(401).send('error, user not updated')
+    }
+    return res.status(201).send('user updated');
+  } catch (err: any) {
+    return res.status(500).send(err.name + ': ' + err.message)
+  }
+}
 )
 
 router.delete('/:userId', async (req, res) => {
