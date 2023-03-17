@@ -12,17 +12,19 @@ export default function ConversationHeader() {
         </div>
         <div className={styles.nameAndStatus}>
           <Typography variant="subtitle1">Bridge Baby</Typography>
-          <Typography variant="subtitle2" color={'green'}>Online</Typography>
+          <Typography variant="subtitle2" color={'green'}>
+            Online
+          </Typography>
         </div>
       </div>
       <div className={styles.rightSideButtons}>
         <IconButton>
-          <VideoCallOutlinedIcon fontSize="medium" color="success"/>
+          <VideoCallOutlinedIcon fontSize="medium" color="success" />
         </IconButton>
         <IconButton>
-          <InfoOutlinedIcon fontSize="small" color="info"/> 
+          <InfoOutlinedIcon fontSize="small" color="info" />
         </IconButton>
       </div>
     </div>
-  )
+  );
 }
