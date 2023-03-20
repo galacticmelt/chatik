@@ -4,7 +4,7 @@ import { Query } from "mongoose";
 function checkIfDocExists(
   boolean: boolean, 
   value: string, 
-  getSomethingFunc: (params: unknown) => Query<Document, unknown>, 
+  getSomethingFunc: (params: any) => Query<any, unknown>, 
   body: unknown
 ) {
   if(boolean === true) {

@@ -1,10 +1,11 @@
 import express from "express";
 import jwt from "jsonwebtoken";
+import { body, param, validationResult } from 'express-validator';
+import env from "../environment.js"
 import { getUsers, createUser, deleteUser, updateUser } from "../services/users.service.js";
 import checkIfDocExists from "../middleware/checkIfDocExists.js";
 
 const router = express.Router()
-const { body, param, validationResult } = require('express-validator');
 
 router.get('/', async (req, res) => {
   try {
@@ -27,7 +28,7 @@ router.post('/',
       }
       try {
         const { email, password } = req.body
-        const token = await jwt.sign({email, password}, process.env.JWT_SECRET);
+        const token = await jwt.sign({email, password}, env.jwtSecret);
         const user = await createUser({token: token, ...req.body})
         if(!user) {
           return res.status(401).send('error, user not created')
