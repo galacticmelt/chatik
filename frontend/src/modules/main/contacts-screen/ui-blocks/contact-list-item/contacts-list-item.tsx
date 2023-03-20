@@ -16,7 +16,9 @@ export default function ContactsListItem({ initials, name }: IContactsList) {
       </div>
       <div className={styles.contactNameAndStatus}>
         <Typography variant="subtitle1">{name}</Typography>
-        <Typography variant="subtitle1" color={'grey'}>last message...</Typography>
+        <Typography variant="subtitle1" color={'grey'}>
+          last message...
+        </Typography>
       </div>
     </div>
   );
