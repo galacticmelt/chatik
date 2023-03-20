@@ -12,6 +12,6 @@
   "ts-node": {
     "esm": true
   },
-  "include": ["src/**/*.ts", "tests/**/*.ts"],
+  "include": ["src/**/*.ts", "tests/**/*.ts", "env.d.ts"],
   "exclude": ["node_modules", ".vscode"],    
 }
