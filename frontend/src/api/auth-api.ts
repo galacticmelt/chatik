@@ -6,7 +6,7 @@ interface IUser {
 
 export const signIn = async (user: IUser) => {
   try {
-    const response = await fetch('http://localhost:5000/users', {
+    await fetch('http://localhost:5000/users', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json;charset=utf-8'

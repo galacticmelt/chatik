@@ -14,6 +14,7 @@ const Form: React.FC<IFormProps> = ({ formTitle, btnTitle, submitFunc }: IFormPr
 
   const onSubmit: SubmitHandler<IFormInputs> = (data) => {
     const user = {
+      username: "testNew",
       email: data.email,
       password: data.password
     };
