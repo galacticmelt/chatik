@@ -3,15 +3,21 @@ import User from "../models/user.model.js"
 interface IUser {
   username: String,
   email: String,
-  token: String | null,
-  chats: [] | null
+  token?: String 
+  chats?: [] 
+}
+
+interface IUserUpdate {
+  username?: String,
+  email?: String,
 }
 
 interface IParams {
-  username: String | null,
-  email: String | null,
-  token: String | null,
-  chats: [] | null
+  _id?: any,
+  username?: String 
+  email?: String 
+  token?: String 
+  chats?: [] 
 }
 
 const getUsers = (params: IParams) => {
@@ -26,8 +32,8 @@ const deleteUser = (userId: string) => {
   return User.findByIdAndDelete(userId)
 }
 
-const updateUser = (userId: string, username: string) => {
-  return User.findByIdAndUpdate(userId, {username: username})
+const updateUser = (userId: string, update: IUserUpdate) => {
+  return User.findByIdAndUpdate(userId, update)
 }
 
 export { getUsers, createUser, deleteUser, updateUser }

@@ -4,9 +4,9 @@ import db from 'mongoose'
 const connectDB = async () => {
   if(env.dbURL) {
     return await db.connect(env.dbURL, () => console.log('connected to DB successfully'));
-  } else (
-    console.log('error connecting to db')
-  )
+  } else {
+    console.log('problem connecting to DB')
+  }
 }
 
 export { db, connectDB }
