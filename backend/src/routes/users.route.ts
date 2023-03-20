@@ -1,9 +1,10 @@
 import express from "express";
-const router = express.Router()
-import env from '../environment'
-import { jest } from '@jest/globals'
-
+import jwt from "jsonwebtoken";
 import { getUsers, createUser, deleteUser, updateUser } from "../services/users.service.js";
+import checkIfDocExists from "../middleware/checkIfDocExists.js";
+
+const router = express.Router()
+const { body, param, validationResult } = require('express-validator');
 
 router.get('/', async (req, res) => {
   try {
@@ -14,16 +15,27 @@ router.get('/', async (req, res) => {
   }
 })
 
-router.post('/', async (req, res) => {
-    try {
-      const user = await createUser(req.body)
-      if(!user) {
-        return res.status(401).send('error, user not created')
+router.post('/', 
+    body('email', 'email is required')
+    .notEmpty()
+    .custom((value: string) => checkIfDocExists(true, value, getUsers, {email: value})),
+    body('password', 'password is required').notEmpty(),
+    async (req, res) => {
+      const errors = validationResult(req)
+      if(!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() })
       }
-      return res.status(201).send('user created');
-    } catch (err: any) {
-      return res.status(500).send(err.name + ': ' + err.message)
-    }
+      try {
+        const { email, password } = req.body
+        const token = await jwt.sign({email, password}, process.env.JWT_SECRET);
+        const user = await createUser({token: token, ...req.body})
+        if(!user) {
+          return res.status(401).send('error, user not created')
+        }
+        return res.status(201).send('user created');
+      } catch (err: any) {
+        return res.status(500).send(err.name + ': ' + err.message)
+      }
   }
 )
 
