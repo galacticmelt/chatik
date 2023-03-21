@@ -1,20 +1,20 @@
 import { TextField, Typography, Button } from '@mui/material';
 import { memo } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { emailValidation, passValidation } from './validation';
-import { IFormProps, IFormInputs } from './form.types';
-import styles from './form.module.scss';
+import { emailValidation, passValidation } from './signin-validation';
+import { ISignInFormProps, ISignInFormInputs } from './signin-form.types';
+import styles from './signin-form.module.scss';
 
-const Form: React.FC<IFormProps> = ({ formTitle, btnTitle, submitFunc }: IFormProps) => {
+const SignInForm: React.FC<ISignInFormProps> = ({ submitFunc, redirectPath }: ISignInFormProps) => {
   const {
     register,
     handleSubmit,
     formState: { errors }
-  } = useForm<IFormInputs>({ reValidateMode: 'onChange' });
+  } = useForm<ISignInFormInputs>({ reValidateMode: 'onChange' });
 
-  const onSubmit: SubmitHandler<IFormInputs> = (data) => {
+  const onSubmit: SubmitHandler<ISignInFormInputs> = (data) => {
     const user = {
-      username: "testNew",
+      username: data.username,
       email: data.email,
       password: data.password
     };
@@ -23,11 +23,18 @@ const Form: React.FC<IFormProps> = ({ formTitle, btnTitle, submitFunc }: IFormPr
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-      <Typography variant="h2">{formTitle}</Typography>
+    <form onSubmit={handleSubmit(onSubmit)} className={styles.signInForm}>
+      <Typography variant="h2">Sign in</Typography>
+      <TextField
+        {...register('username', { required: 'Please enter your name' })}
+        label="Name"
+        size="small"
+        fullWidth={true}
+        error={errors.username ? true : false}
+        helperText={errors.username?.message}
+      />
       <TextField
         {...register('email', emailValidation)}
-        name="email"
         label="Email"
         size="small"
         fullWidth={true}
@@ -44,10 +51,10 @@ const Form: React.FC<IFormProps> = ({ formTitle, btnTitle, submitFunc }: IFormPr
         helperText={errors.password?.message}
       />
       <Button type="submit" variant="contained">
-        {btnTitle}
+        Let&#39;s go!
       </Button>
     </form>
   );
 };
 
-export default memo(Form);
+export default memo(SignInForm);
