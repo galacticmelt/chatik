@@ -1,11 +1,9 @@
 import env from './src/environment.js'
-
 import express from 'express'
 import { connectDB } from './src/db.js'
-
 import cors from 'cors'
-
 import usersRouter from './src/routes/users.route.js'
+import authRouter from './src/routes/auth.route.js'
 
 const app = express()
 
@@ -16,6 +14,7 @@ app.use(cors({
 }))
 
 app.use('/users', usersRouter)
+app.use('/auth', authRouter)
 
 if (env.nodeEnv !== 'test') {
   connectDB()

@@ -3,8 +3,7 @@ import User from "../models/user.model.js"
 interface IUser {
   username: String,
   email: String,
-  token?: String 
-  chats?: [] 
+  token: String 
 }
 
 interface IUserUpdate {
@@ -17,7 +16,6 @@ interface IParams {
   username?: String 
   email?: String 
   token?: String 
-  chats?: [] 
 }
 
 const getUsers = (params: IParams) => {

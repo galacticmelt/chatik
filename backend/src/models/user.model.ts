@@ -9,7 +9,10 @@ const UserSchema = new db.Schema({
     type: String,
     required: true,
   },
-  token: String,
+  token: {
+    type: String,
+    required: true,
+  },
   chats: [{
     type: 'ObjectId',
     ref: 'Chat'
