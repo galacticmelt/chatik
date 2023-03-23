@@ -19,7 +19,7 @@ router.get('/', async (req, res) => {
 router.post('/', 
     body('email', 'email is required')
     .notEmpty()
-    .custom((value: string) => checkIfDocExists(true, value, getUsers, {email: value})),
+    .custom((value: string) => checkIfDocExists(false, value, getUsers, {email: value})),
     body('password', 'password is required').notEmpty(),
     async (req, res) => {
       const errors = validationResult(req)

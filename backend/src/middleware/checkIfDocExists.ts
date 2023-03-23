@@ -10,13 +10,13 @@ function checkIfDocExists(
   if(boolean === true) {
     return getSomethingFunc(body).then(something => {
       if(something.length === 0) {
-        return Promise.reject(`No such entity as '${value}'`)
+        return Promise.reject(`Entity '${value}' doesn't exist`)
       }
     })
   } else if(boolean === false) {
       return getSomethingFunc(body).then(something => {
         if(something.length !== 0) {
-          return Promise.reject(`Entity '${value}' doesn't exist`)
+          return Promise.reject(`Entity '${value}' already exist`)
         }
       })
   }
