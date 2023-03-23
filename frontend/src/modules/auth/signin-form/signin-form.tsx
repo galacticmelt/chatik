@@ -5,7 +5,7 @@ import { emailValidation, passValidation } from './signin-validation';
 import { ISignInFormProps, ISignInFormInputs } from './signin-form.types';
 import styles from './signin-form.module.scss';
 
-const SignInForm: React.FC<ISignInFormProps> = ({ submitFunc, redirectPath }: ISignInFormProps) => {
+const SignInForm: React.FC<ISignInFormProps> = ({ submitFunc }: ISignInFormProps) => {
   const {
     register,
     handleSubmit,

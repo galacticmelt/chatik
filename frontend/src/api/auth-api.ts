@@ -1,10 +1,15 @@
-interface IUser {
+interface IUserSignIn {
   username: string;
   email: string;
   password: string;
 }
 
-export const signIn = async (user: IUser) => {
+interface IUserLogIn {
+  email: string;
+  password: string;
+}
+
+export const signIn = async (user: IUserSignIn) => {
   try {
     const res = await fetch('http://localhost:5000/users', {
       method: 'POST',
@@ -24,7 +29,7 @@ export const signIn = async (user: IUser) => {
   }
 };
 
-export const logIn = async (user: IUser) => {
+export const logIn = async (user: IUserLogIn) => {
   try {
     const res = await fetch('http://localhost:5000/auth', {
       method: 'POST',
@@ -38,6 +43,7 @@ export const logIn = async (user: IUser) => {
       throw new Error(JSON.stringify(err));
     }
     const data = await res.json();
+    console.log(data);
     return data;
   } catch (e: unknown) {
     if (e instanceof Error) {

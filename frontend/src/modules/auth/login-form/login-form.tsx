@@ -5,7 +5,7 @@ import { emailValidation, passValidation } from './login-validation';
 import { ILogInFormProps, ILogInFormInputs } from './login-form.types';
 import styles from './login-form.module.scss';
 
-const LogInForm: React.FC<ILogInFormProps> = ({ submitFunc, redirectPath }: ILogInFormProps) => {
+const LogInForm: React.FC<ILogInFormProps> = ({ submitFunc }: ILogInFormProps) => {
   const {
     register,
     handleSubmit,

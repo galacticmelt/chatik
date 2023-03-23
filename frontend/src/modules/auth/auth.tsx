@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button } from '@mui/material';
 import LogInForm from './login-form/login-form';
 import SignInForm from './signin-form/signin-form';
-import { signIn } from '../../api/auth-api';
+import { signIn, logIn } from '../../api/auth-api';
 import styles from './auth.module.scss';
 
 export default function Auth() {
@@ -15,7 +15,7 @@ export default function Auth() {
     <div className={styles.auth}>
       {hasAccount ? (
         <>
-          <LogInForm submitFunc={() => console.log('logged')} />
+          <LogInForm submitFunc={logIn} />
           <Button onClick={hasAccountToggle} size="small" sx={{ mt: 1 }}>
             No account?
           </Button>
