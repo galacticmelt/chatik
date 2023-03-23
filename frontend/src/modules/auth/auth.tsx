@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Button } from '@mui/material';
-import Form from './form/form';
-import { signIn } from '../../api/auth-api';
+import LogInForm from './login-form/login-form';
+import SignInForm from './signin-form/signin-form';
+import { signIn, logIn } from '../../api/auth-api';
 import styles from './auth.module.scss';
 
 export default function Auth() {
@@ -14,16 +15,16 @@ export default function Auth() {
     <div className={styles.auth}>
       {hasAccount ? (
         <>
-          <Form formTitle="Вход" btnTitle="Войти" submitFunc={() => console.log('logged')} />
+          <LogInForm submitFunc={logIn} />
           <Button onClick={hasAccountToggle} size="small" sx={{ mt: 1 }}>
-            Нет аккаунта?
+            No account?
           </Button>
         </>
       ) : (
         <>
-          <Form formTitle="Регистрация" btnTitle="Создать профиль" submitFunc={signIn} />
+          <SignInForm submitFunc={signIn} />
           <Button onClick={hasAccountToggle} size="small" sx={{ mt: 1 }}>
-            Уже есть аккаунт?
+            Already signed in?
           </Button>
         </>
       )}
