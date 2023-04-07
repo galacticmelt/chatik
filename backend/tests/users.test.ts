@@ -1,7 +1,7 @@
 import app from '../app'
 import request from 'supertest'
 import { connectMockDB, disconnectMockDB } from '../src/mockDB'
-import { createUser, getUsers } from '../src/services/users.service'
+import { createUser, getUsers } from '../src/services/users.services'
 import { userMock, updatedUserMock } from '../src/fixtures'
 
 beforeAll(async () => connectMockDB())

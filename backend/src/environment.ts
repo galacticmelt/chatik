@@ -6,5 +6,6 @@ export default {
   dbURL: process.env.MONGO_CONNECT!,
   nodeEnv: process.env.NODE_ENV!,
   allowedOrigins: process.env.ALLOWED_ORIGINS!,
-  jwtSecret: process.env.JWT_SECRET!
+  jwtAccessSign: process.env.JWT_ACCESS_SIGN!,
+  jwtRefreshSign: process.env.JWT_REFRESH_SIGN!,
 }
