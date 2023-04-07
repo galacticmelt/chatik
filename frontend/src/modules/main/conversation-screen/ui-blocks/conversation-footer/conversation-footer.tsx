@@ -1,7 +1,7 @@
 import React from 'react';
 import AttachmentOutlinedIcon from '@mui/icons-material/AttachmentOutlined';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
-import { FormControl, IconButton, InputAdornment, TextField } from '@mui/material';
+import { IconButton, InputAdornment, TextField } from '@mui/material';
 import styles from './conversation-footer.module.scss';
 
 export default function ConversationFooter() {
