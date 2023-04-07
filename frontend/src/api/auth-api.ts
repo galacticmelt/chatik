@@ -1,27 +1,27 @@
-interface IUserSignIn {
+import { resErrorCheck } from "./resErrorCheck";
+
+interface IUserSignUp {
   username: string;
   email: string;
   password: string;
 }
 
-interface IUserLogIn {
+export interface IUserLogIn {
   email: string;
   password: string;
 }
 
-export const signIn = async (user: IUserSignIn) => {
+export const signUp = async (user: IUserSignUp) => {
   try {
     const res = await fetch('http://localhost:5000/users', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json;charset=utf-8'
       },
+      credentials: 'include',
       body: JSON.stringify(user)
     });
-    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(JSON.stringify(err));
-    }
+    resErrorCheck(res);
   } catch (e: unknown) {
     if (e instanceof Error) {
       console.log(e);
@@ -29,19 +29,17 @@ export const signIn = async (user: IUserSignIn) => {
   }
 };
 
-export const logIn = async (user: IUserLogIn) => {
+export const fetchAuthData = async (user: IUserLogIn) => {
   try {
-    const res = await fetch('http://localhost:5000/auth', {
+    const res = await fetch('http://127.0.0.1:5000/auth', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json;charset=utf-8'
       },
+      credentials: 'include',
       body: JSON.stringify(user)
     });
-    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(JSON.stringify(err));
-    }
+    resErrorCheck(res);
     const data = await res.json();
     console.log(data);
     return data;
@@ -50,4 +48,10 @@ export const logIn = async (user: IUserLogIn) => {
       console.log(e);
     }
   }
+};
+
+export const fetchUserById = async (id: string) => {
+  const res = await fetch(`http://localhost:5000/users?${id}`);
+  const data = await res.json();
+  return data;
 };

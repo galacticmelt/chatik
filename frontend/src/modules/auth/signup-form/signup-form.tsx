@@ -1,18 +1,18 @@
 import { TextField, Typography, Button } from '@mui/material';
 import { memo } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { emailValidation, passValidation } from './signin-validation';
-import { ISignInFormProps, ISignInFormInputs } from './signin-form.types';
-import styles from './signin-form.module.scss';
+import { emailValidation, passValidation } from './signup-validation';
+import { ISignUpFormProps, ISignUpFormInputs } from './signup-form.types';
+import styles from './signup-form.module.scss';
 
-const SignInForm: React.FC<ISignInFormProps> = ({ submitFunc }: ISignInFormProps) => {
+const SignUpForm: React.FC<ISignUpFormProps> = ({ submitFunc }: ISignUpFormProps) => {
   const {
     register,
     handleSubmit,
     formState: { errors }
-  } = useForm<ISignInFormInputs>({ reValidateMode: 'onChange' });
+  } = useForm<ISignUpFormInputs>({ reValidateMode: 'onChange' });
 
-  const onSubmit: SubmitHandler<ISignInFormInputs> = (data) => {
+  const onSubmit: SubmitHandler<ISignUpFormInputs> = (data) => {
     const user = {
       username: data.username,
       email: data.email,
@@ -23,8 +23,8 @@ const SignInForm: React.FC<ISignInFormProps> = ({ submitFunc }: ISignInFormProps
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className={styles.signInForm}>
-      <Typography variant="h2">Sign in</Typography>
+    <form onSubmit={handleSubmit(onSubmit)} className={styles.signUpForm}>
+      <Typography variant="h2">Sign up</Typography>
       <TextField
         {...register('username', { required: 'Please enter your name' })}
         label="Name"
@@ -57,4 +57,4 @@ const SignInForm: React.FC<ISignInFormProps> = ({ submitFunc }: ISignInFormProps
   );
 };
 
-export default memo(SignInForm);
+export default memo(SignUpForm);
