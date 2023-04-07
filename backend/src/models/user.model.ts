@@ -4,12 +4,14 @@ const UserSchema = new db.Schema({
   username: {
     type: String,
     required: true,
+    unique: true
   },
   email: {
     type: String,
     required: true,
+    unique: true,
   },
-  token: {
+  password: {
     type: String,
     required: true,
   },
