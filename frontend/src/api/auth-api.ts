@@ -1,19 +1,10 @@
-import { resErrorCheck } from "./resErrorCheck";
-
-interface IUserSignUp {
-  username: string;
-  email: string;
-  password: string;
-}
-
-export interface IUserLogIn {
-  email: string;
-  password: string;
-}
+import { responseHandler } from '../shared/helpers';
+import { API_ROUTES } from '../shared/constants';
+import { IUserLogIn, IUserSignUp } from '../shared/types';
 
 export const signUp = async (user: IUserSignUp) => {
   try {
-    const res = await fetch('http://localhost:5000/users', {
+    const res = await fetch(API_ROUTES.AUTH, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json;charset=utf-8'
@@ -21,17 +12,20 @@ export const signUp = async (user: IUserSignUp) => {
       credentials: 'include',
       body: JSON.stringify(user)
     });
-    resErrorCheck(res);
-  } catch (e: unknown) {
-    if (e instanceof Error) {
-      console.log(e);
+    const data = await responseHandler(res);
+    return data;
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.log(err.name + ': ' + err.message);
     }
+    throw err;
   }
 };
 
 export const fetchAuthData = async (user: IUserLogIn) => {
   try {
-    const res = await fetch('http://127.0.0.1:5000/auth', {
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+    const res = await fetch(API_ROUTES.AUTH, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json;charset=utf-8'
@@ -39,19 +33,32 @@ export const fetchAuthData = async (user: IUserLogIn) => {
       credentials: 'include',
       body: JSON.stringify(user)
     });
-    resErrorCheck(res);
-    const data = await res.json();
-    console.log(data);
+    const data = await responseHandler(res);
     return data;
-  } catch (e: unknown) {
-    if (e instanceof Error) {
-      console.log(e);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.log(err.name + ': ' + err.message);
+      throw err;
     }
   }
 };
 
-export const fetchUserById = async (id: string) => {
-  const res = await fetch(`http://localhost:5000/users?${id}`);
-  const data = await res.json();
-  return data;
+export const refreshAccess = async () => {
+  try {
+    const res = await fetch(API_ROUTES.REFRESH_ACCESS, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8'
+      },
+      credentials: 'include'
+    });
+    const data = await responseHandler(res);
+    sessionStorage.setItem('accessToken', data.accessToken);
+    return data;
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.log(err.name + ': ' + err.message);
+      throw err;
+    }
+  }
 };
