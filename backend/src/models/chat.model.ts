@@ -1,7 +1,6 @@
-import { db } from '../db'
+import { db } from '../db.js'
 
 const ChatSchema = new db.Schema({
-  title: String,
   users: [{
     type: 'ObjectId',
     ref: 'User'

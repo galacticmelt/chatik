@@ -1,37 +1,47 @@
 import User from "../models/user.model.js"
 
 interface IUser {
-  username: String,
-  email: String,
-  token: String 
+  username: string,
+  email: string,
+  password: string
 }
 
 interface IUserUpdate {
-  username?: String,
-  email?: String,
+  username?: string,
+  email?: string,
+  chats?: string[]
 }
 
 interface IParams {
   _id?: any,
-  username?: String 
-  email?: String 
-  token?: String 
+  username?: string 
+  email?: string 
 }
 
-const getUsers = (params: IParams) => {
+const getUserByParamsSRV = (params: IParams) => {
   return User.find(params)
 }
 
-const createUser = (user: IUser) => {
+const getUserByIdSRV = (userId: string) => {
+  return User.findById(userId).populate({path: 'chats'})
+}
+
+const createUserSRV = (user: IUser) => {
   return User.create(user);
 }
 
-const deleteUser = (userId: string) => {
+const deleteUserSRV = (userId: string) => {
   return User.findByIdAndDelete(userId)
 }
 
-const updateUser = (userId: string, update: IUserUpdate) => {
+const updateUserSRV = (userId: string, update: IUserUpdate) => {
   return User.findByIdAndUpdate(userId, update)
 }
 
-export { getUsers, createUser, deleteUser, updateUser }
+export { 
+  getUserByParamsSRV, 
+  getUserByIdSRV, 
+  createUserSRV, 
+  deleteUserSRV, 
+  updateUserSRV 
+}

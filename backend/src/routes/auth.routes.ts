@@ -1,5 +1,5 @@
 import express from "express";
-import { body } from 'express-validator';
+import { body, cookie } from 'express-validator';
 import { validationResultHandler } from "../middleware/validationResultHandler.js";
 import { tryCatch } from "../helpers/tryCatch.js";
 import { logIn, refreshAccess } from "../controllers/auth.controllers.js";
@@ -14,8 +14,6 @@ router.post('/',
 )
 
 router.post('/refresh-access',
-  body('refreshToken', 'got empty refresh token').notEmpty(),
-  validationResultHandler,
   tryCatch(refreshAccess)
 )
 
