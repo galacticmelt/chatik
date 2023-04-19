@@ -5,10 +5,7 @@ import { notFoundHandler } from "../middleware/notFoundHandler.js";
 import { bearerPassport } from "../middleware/passport.js";
 import { tryCatch } from "../helpers/tryCatch.js";
 import { 
-  getUsersController, 
-  createUserController, 
-  updateUserController, 
-  deleteUserController 
+  getUserByParams, getUserById, createUser, updateUser, deleteUser 
 } from "../controllers/users.controllers.js";
 
 
@@ -16,22 +13,27 @@ const router = express.Router()
 
 router.get('/',
   bearerPassport,
-  tryCatch(getUsersController)
+  tryCatch(getUserByParams)
+)
+
+router.get('/:userId',
+  bearerPassport,
+  tryCatch(getUserById)
 )
 
 router.post('/', 
   body('email', 'email is required').notEmpty(),
   body('password', 'password is required').notEmpty(),
   validationResultHandler,
-  tryCatch(createUserController)
+  tryCatch(createUser)
 )
 
 router.patch('/:userId',
-  tryCatch(updateUserController)
+  tryCatch(updateUser)
 )
 
 router.delete('/:userId',
-  tryCatch(deleteUserController)
+  tryCatch(deleteUser)
 )
 
 router.use(notFoundHandler)

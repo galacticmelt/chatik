@@ -15,11 +15,12 @@ const UserSchema = new db.Schema({
     type: String,
     required: true,
   },
-  chats: [{
-    type: 'ObjectId',
-    ref: 'Chat'
-  }]
-
+  chats: [
+    {
+      type: 'ObjectId',
+      ref: 'Chat'
+    }
+  ]
 })
 const User = db.model('User', UserSchema)
 

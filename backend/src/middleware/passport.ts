@@ -21,10 +21,9 @@ export const bearerPassport = (req: Request, res: Response, next: NextFunction) 
     { session: false },
     (err: any, value: any, info: any) => {
       if(!req.headers.authorization) {
-        const noTokenErr = new Error ('token not recieved')
-        return next(noTokenErr)
+        return res.status(400).json({error: 'Token not provided'})
       } else if (err) {
-        next(err)
+        return res.status(401).json({error: err.message})
       }
       next()
     }
