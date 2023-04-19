@@ -1,21 +1,21 @@
-import { Avatar } from '@mui/material';
 import { Typography } from '@mui/material';
-import { deepOrange } from '@mui/material/colors';
+import ContactAvatar from '../contact-avatar/contact-avatar';
 import styles from './contacts-list-item.module.scss';
 
-interface IContactsList {
-  initials: string;
-  name: string;
+interface IContactsListItem {
+  companionName: string;
+  isOnline: boolean;
+  onClick: React.MouseEventHandler;
 }
 
-export default function ContactsListItem({ initials, name }: IContactsList) {
+export default function ContactsListItem({ companionName, isOnline, onClick }: IContactsListItem) {
   return (
-    <div className={styles.contactsListItem}>
-      <div className={styles.avatarWrapper}>
-        <Avatar sx={{ height: 1, width: 1, bgcolor: deepOrange[600] }}>{initials}</Avatar>
-      </div>
+    <div className={styles.contactsListItem} onClick={onClick}>
+      <ContactAvatar name={companionName} isOnline={isOnline} />
       <div className={styles.contactNameAndStatus}>
-        <Typography variant="subtitle1">{name}</Typography>
+        <Typography variant="subtitle1" textOverflow="ellipsis">
+          {companionName}
+        </Typography>
         <Typography variant="subtitle1" color={'grey'}>
           last message...
         </Typography>

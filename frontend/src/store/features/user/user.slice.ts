@@ -1,41 +1,29 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { fetchUserById } from '../../../api/auth-api';
-import { IUserPayload } from './user.types';
+import { fetchUserById } from '../../../api/user-api';
+import { UserState } from './user.types';
 
-type State = {
-  user: any;
-  isLoading: boolean;
-  error: {
-    status: boolean;
-    value: null | any;
-  };
-};
-
-const setUser = createAsyncThunk<IUserPayload, string>(
-  'auth/setUser',
-  async (id, { rejectWithValue }) => {
-    try {
-      const user = await fetchUserById(id);
-      return user;
-    } catch (e) {
-      if (e instanceof Error) {
-        console.log(rejectWithValue(e));
-        return rejectWithValue(e);
-      }
+const setUser = createAsyncThunk('auth/setUser', async (id: string, { rejectWithValue }) => {
+  try {
+    const user = await fetchUserById(id);
+    return user;
+  } catch (e) {
+    if (e instanceof Error) {
+      console.log(e.message);
+      return rejectWithValue(e.name + ': ' + e.message);
     }
   }
-);
+});
 
 const userSlice = createSlice({
   name: 'user',
   initialState: {
     user: {},
     isLoading: false,
-    error: {
+    userError: {
       status: false,
       value: null
     }
-  } as State,
+  } as UserState,
   reducers: {
     unsetUser(state) {
       state.user = {};
@@ -47,11 +35,11 @@ const userSlice = createSlice({
     });
     builder.addCase(setUser.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.user = action.payload;
+      state.user = action.payload.user;
     });
     builder.addCase(setUser.rejected, (state, action) => {
-      state.error.status = true;
-      state.error.value = action.payload.message;
+      state.userError.status = true;
+      state.userError.value = action.payload;
     });
   }
 });
