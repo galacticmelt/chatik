@@ -32,6 +32,7 @@ const SignUpForm: React.FC<ISignUpFormProps> = ({ submitFunc }: ISignUpFormProps
         fullWidth={true}
         error={errors.username ? true : false}
         helperText={errors.username?.message}
+        autoComplete="off"
       />
       <TextField
         {...register('email', emailValidation)}
@@ -40,6 +41,7 @@ const SignUpForm: React.FC<ISignUpFormProps> = ({ submitFunc }: ISignUpFormProps
         fullWidth={true}
         error={errors.email ? true : false}
         helperText={errors.email?.message}
+        autoComplete="off"
       />
       <TextField
         {...register('password', passValidation)}
@@ -49,9 +51,10 @@ const SignUpForm: React.FC<ISignUpFormProps> = ({ submitFunc }: ISignUpFormProps
         fullWidth={true}
         error={errors.password ? true : false}
         helperText={errors.password?.message}
+        autoComplete="off"
       />
       <Button type="submit" variant="contained">
-        Let&#39;s go!
+        Submit
       </Button>
     </form>
   );

@@ -1,3 +1,5 @@
+import { IncomingHistoryMessage } from '../store/features/messages/messages.types';
+
 export interface IUserSignUp {
   username: string;
   email: string;
@@ -15,6 +17,7 @@ export type RawChat = {
     _id: string;
     username: string;
   }[];
+  lastMessage: IncomingHistoryMessage;
 };
 
 export type User = {

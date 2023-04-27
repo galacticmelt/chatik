@@ -8,5 +8,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: lightgray;
+  background: linear-gradient(135deg, #e0e0e0 25%, transparent 40%) -50px 0,
+    linear-gradient(225deg, #e0e0e0 25%, transparent 40%) -50px 0,
+    linear-gradient(315deg, #e0e0e0 25%, transparent 40%),
+    linear-gradient(45deg, #e0e0e0 25%, transparent 40%);
+  background-size: 100px 100px;
+  background-color: #eee;
 }

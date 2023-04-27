@@ -1,37 +1,6 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { fetchMessages, postMessage } from '../../../api/messages-api';
-import { MessagesState, OutcomingHistoryMessage } from './messages.types';
-import { normalizeMessages } from './messages.helpers';
-
-const setMessages = createAsyncThunk(
-  'messages/setMessages',
-  async (id: string, { rejectWithValue }) => {
-    try {
-      const messages = await fetchMessages(id);
-      return messages;
-    } catch (e) {
-      if (e instanceof Error) {
-        console.log(e.message);
-        return rejectWithValue(e.name + ': ' + e.message);
-      }
-    }
-  }
-);
-
-const sendMessage = createAsyncThunk(
-  'messages/sendMessage',
-  async (message: OutcomingHistoryMessage, { rejectWithValue }) => {
-    try {
-      const messages = await postMessage(message);
-      return messages;
-    } catch (e) {
-      if (e instanceof Error) {
-        console.log(e.message);
-        return rejectWithValue(e.name + ': ' + e.message);
-      }
-    }
-  }
-);
+import { createSlice } from '@reduxjs/toolkit';
+import { MessagesState } from './messages.types';
+import { setMessages, sendMessage, initNewChat } from './messages.thunks';
 
 const messagesSlice = createSlice({
   name: 'messages',
@@ -65,12 +34,11 @@ const messagesSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(setMessages.pending, (state) => {
       state.isLoading = true;
+      state.messagesRequested = true;
     });
     builder.addCase(setMessages.fulfilled, (state, action) => {
       state.isLoading = false;
-      const normalized = normalizeMessages(action.payload);
-      state.messagesRequested = true;
-      state.messages = normalized;
+      state.messages = action.payload;
     });
     builder.addCase(setMessages.rejected, (state, action) => {
       state.isLoading = false;
@@ -87,12 +55,26 @@ const messagesSlice = createSlice({
       state.messagesError.status = true;
       state.messagesError.value = action.payload;
     });
+    builder.addCase(initNewChat.pending, (state) => {
+      return state;
+    });
+    builder.addCase(initNewChat.fulfilled, (state, action) => {
+      const { chatID, companionID, companionName } = action.payload;
+      state.chatID = chatID;
+      state.companionID = companionID;
+      state.companionName = companionName;
+    });
+    builder.addCase(initNewChat.rejected, (state, action) => {
+      state.messagesError.status = true;
+      state.messagesError.value = action.payload;
+    });
   }
 });
 
 export const messagesActions = {
   setMessages,
   sendMessage,
+  initNewChat,
   unsetCurrentChat: messagesSlice.actions.unsetCurrentChat,
   setCurrentChat: messagesSlice.actions.setCurrentChat
 };

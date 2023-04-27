@@ -1,23 +1,29 @@
 import ContactsListItem from '../contact-list-item/contacts-list-item';
 import ContactsListItemSkeleton from '../contact-list-item/contacts-list-item-skeleton';
 import { Typography } from '@mui/material';
-import { messagesActions } from '../../../../../store/features/messages/messages.slice';
-import { useAppDispatch, useAppSelector } from '../../../../../store/hooks';
-import { NormalizedChat } from '../../../../../store/features/chats/chats.types';
+import { NormalizedChat, SearchUser } from '../../../../../store/features/chats/chats.types';
 import styles from './contacts-list.module.scss';
+import { SocketUser } from '../../../../../store/features/socket/socket.types';
 
-export default function ContactsList() {
-  const dispatch = useAppDispatch();
-  const { chats, chatsError, isLoading } = useAppSelector((state) => state.chats);
-  const { onlineUsers } = useAppSelector((state) => state.socket);
+interface IContactsList {
+  usersList: SearchUser[] | NormalizedChat[];
+  onlineUsers: SocketUser[];
+  isLoading: boolean;
+  onClick: any;
+}
 
-  const loadMessagesHandler = (chat: NormalizedChat) => {
-    dispatch(messagesActions.setCurrentChat(chat));
-    dispatch(messagesActions.setMessages(chat.chatID));
-  };
-
-  if (chatsError.status) {
-    return <Typography>Error: {chatsError.value}</Typography>;
+export default function ContactsList({
+  usersList,
+  onlineUsers,
+  isLoading,
+  onClick
+}: IContactsList) {
+  if (!usersList.length && !isLoading) {
+    return (
+      <div className={styles.noChats}>
+        <Typography>No chats&#129300;</Typography>
+      </div>
+    );
   }
   return (
     <div className={styles.contactList}>
@@ -27,18 +33,21 @@ export default function ContactsList() {
           <ContactsListItemSkeleton />
           <ContactsListItemSkeleton />
           <ContactsListItemSkeleton />
-          <ContactsListItemSkeleton />
-          <ContactsListItemSkeleton />
-          <ContactsListItemSkeleton />
         </>
       ) : (
-        chats.map((chat) => {
+        usersList.map((item) => {
+          const user = item as SearchUser;
+          const chat = item as NormalizedChat;
           return (
             <ContactsListItem
-              key={chat.chatID}
-              companionName={chat.companionName}
-              isOnline={onlineUsers.some((user) => user.userId === chat.companionID)}
-              onClick={() => loadMessagesHandler(chat)}
+              key={chat.chatID || user._id}
+              contactName={chat.companionName || user.username}
+              isOnline={onlineUsers.some(
+                (onlineUser) =>
+                  onlineUser.userId === chat.companionID || onlineUser.userId === user._id
+              )}
+              lastMessage={chat.lastMessage}
+              onClick={() => onClick(item)}
             />
           );
         })

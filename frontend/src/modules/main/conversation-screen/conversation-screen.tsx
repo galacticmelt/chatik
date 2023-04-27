@@ -20,7 +20,7 @@ export default function ConversationScreen() {
       ) : isLoading ? (
         <CircularProgress size={60} />
       ) : (
-        <Typography variant="h2" sx={{ textAlign: 'center' }}>
+        <Typography variant="h3" sx={{ textAlign: 'center' }}>
           Welcome, {user.username?.split(' ')[0]}! Start messaging.
         </Typography>
       )}

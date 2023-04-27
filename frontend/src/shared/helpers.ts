@@ -67,5 +67,9 @@ export function stringToColor(string: string) {
 }
 
 export function stringAvatar(name: string) {
-  return `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`;
+  const nameArr = name.split(' ');
+  if (nameArr.length > 1) {
+    return `${nameArr[0][0]}${nameArr[1][0]}`;
+  }
+  return `${nameArr[0][0]}`;
 }

@@ -1,6 +1,6 @@
 import Main from './modules/main/main';
 import ErrorPage from './modules/error/error-page';
-import Auth from './modules/auth/auth';
+import Entry from './modules/entry/entry';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAppSelector } from './store/hooks';
 
@@ -13,12 +13,12 @@ function App() {
         <Route
           path="/"
           errorElement={<ErrorPage />}
-          element={loggedUserID ? <Main /> : <Navigate to="/auth" />}
+          element={loggedUserID ? <Main /> : <Navigate to="/entry" />}
         />
         <Route
-          path="/auth"
+          path="/entry"
           errorElement={<ErrorPage />}
-          element={!loggedUserID ? <Auth /> : <Navigate to="/" />}
+          element={!loggedUserID ? <Entry /> : <Navigate to="/" />}
         />
       </Routes>
     </BrowserRouter>

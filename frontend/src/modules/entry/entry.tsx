@@ -2,12 +2,12 @@ import { useState } from 'react';
 import { Button } from '@mui/material';
 import LogInForm from './login-form/login-form';
 import SignUpForm from './signup-form/signup-form';
-import { signUp } from '../../api/auth-api';
+import { registerUser } from '../../api/user-api';
 import { authActions } from '../../store/features/auth/auth.slice';
-import styles from './auth.module.scss';
+import styles from './entry.module.scss';
 import { useAppDispatch } from '../../store/hooks';
 
-export default function Auth() {
+export default function Entry() {
   const dispatch = useAppDispatch();
   const [hasAccount, setHasAccount] = useState(true);
 
@@ -26,7 +26,7 @@ export default function Auth() {
         </>
       ) : (
         <>
-          <SignUpForm submitFunc={signUp} />
+          <SignUpForm submitFunc={registerUser} />
           <Button onClick={hasAccountToggle} size="small" sx={{ mt: 1 }}>
             Already signed up?
           </Button>

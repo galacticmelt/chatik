@@ -24,7 +24,7 @@ export default function MessageItem({ isCompanion, text, time }: IMessageItem) {
         <Card>
           <CardContentStyled sx={{ px: 1, pt: 1 }}>
             <Typography>{text}</Typography>
-            <Typography variant="subtitle2" align="right" color={'grey'}>
+            <Typography variant="caption" align="right" color={'grey'}>
               {normalizeTime(time)}
             </Typography>
           </CardContentStyled>
