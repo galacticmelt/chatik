@@ -16,7 +16,8 @@ export const store = configureStore({
     socket: socketReducer
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(authMiddleware, socketMiddleware)
+    getDefaultMiddleware().concat(authMiddleware, socketMiddleware),
+  devTools: process.env.NODE_ENV !== 'production'
 });
 
 export type RootState = ReturnType<typeof store.getState>;

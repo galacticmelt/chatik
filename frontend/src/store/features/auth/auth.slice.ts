@@ -1,22 +1,6 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { fetchAuthData } from '../../../api/auth-api';
-import { ILogInInputs, ILogInPayload } from './auth.types';
+import { createSlice } from '@reduxjs/toolkit';
 import { AuthState } from './auth.types';
-
-const logIn = createAsyncThunk<ILogInPayload, ILogInInputs>(
-  'auth/setTokens',
-  async (credentials, { rejectWithValue }) => {
-    try {
-      const authData = await fetchAuthData(credentials);
-      return authData;
-    } catch (e) {
-      if (e instanceof Error) {
-        console.log(e);
-        return rejectWithValue(e.name + ': ' + e.message);
-      }
-    }
-  }
-);
+import { logIn } from './auth.thunks';
 
 const authSlice = createSlice({
   name: 'auth',

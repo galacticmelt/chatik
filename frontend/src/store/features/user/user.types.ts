@@ -2,7 +2,7 @@ import { User } from '../../../shared/types';
 
 export type UserState = {
   user: User;
-  isLoading: boolean;
+  userLoading: boolean;
   userError: {
     status: boolean;
     value: null | any;

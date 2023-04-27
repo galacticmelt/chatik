@@ -1,25 +1,12 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { fetchChats } from '../../../api/chats-api';
+import { createSlice } from '@reduxjs/toolkit';
 import { ChatsState } from './chats.types';
-import { normalizeChats } from './chats.helpers';
-
-const setChats = createAsyncThunk('chats/setChats', async (id: string, { rejectWithValue }) => {
-  try {
-    const chats = await fetchChats(id);
-    const normalized = normalizeChats(id, chats);
-    return normalized;
-  } catch (e) {
-    if (e instanceof Error) {
-      console.log(e.message);
-      return rejectWithValue(e.name + ': ' + e.message);
-    }
-  }
-});
+import { setAllUsers, setChats } from './chats.thunks';
 
 const chatsSlice = createSlice({
   name: 'chats',
   initialState: {
     chats: [],
+    allUsers: [],
     isLoading: false,
     chatsError: {
       status: false,
@@ -29,6 +16,7 @@ const chatsSlice = createSlice({
   reducers: {
     unsetChats(state) {
       state.chats = [];
+      state.allUsers = [];
     }
   },
   extraReducers: (builder) => {
@@ -41,13 +29,25 @@ const chatsSlice = createSlice({
     });
     builder.addCase(setChats.rejected, (state, action) => {
       state.chatsError.status = true;
-      state.chatsError.value = action.payload;
+      state.chatsError.value = action.payload.message;
+    });
+    builder.addCase(setAllUsers.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(setAllUsers.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.allUsers = action.payload!;
+    });
+    builder.addCase(setAllUsers.rejected, (state, action) => {
+      state.chatsError.status = true;
+      state.chatsError.value = action.payload.message;
     });
   }
 });
 
 export const chatsActions = {
   setChats,
+  setAllUsers,
   unsetChats: chatsSlice.actions.unsetChats
 };
 

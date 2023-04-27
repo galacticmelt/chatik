@@ -11,7 +11,7 @@ export default function ContactSearch() {
           </InputAdornment>
         )
       }}
-      variant="filled"
+      variant="outlined"
       size="small"
       placeholder="Search"
       hiddenLabel

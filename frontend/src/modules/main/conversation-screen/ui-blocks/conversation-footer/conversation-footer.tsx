@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../../../store/hooks';
-import AttachmentOutlinedIcon from '@mui/icons-material/AttachmentOutlined';
+import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import { IconButton, InputAdornment, TextField } from '@mui/material';
 import { socketActions } from '../../../../../store/features/socket/socket.slice';
 import { createSocketMessage, createHistoryMessage } from '../../../../../shared/helpers';
-import styles from './conversation-footer.module.scss';
 import { messagesActions } from '../../../../../store/features/messages/messages.slice';
+import { DEFAULT_VALUES } from '../../../../../shared/constants';
+import { chatsActions } from '../../../../../store/features/chats/chats.slice';
+import styles from './conversation-footer.module.scss';
 
 export default function ConversationFooter() {
   const [messageText, setMessageText] = useState('');
@@ -16,9 +18,27 @@ export default function ConversationFooter() {
 
   const dispatch = useAppDispatch();
 
-  const sendMessageHandler = (e: React.SyntheticEvent) => {
+  const sendMessageHandler = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     if (!messageText) return;
+    if (chatID === DEFAULT_VALUES.PHANTOM_CHAT_ID) {
+      const { payload } = await dispatch(messagesActions.initNewChat([loggedUserID, companionID]));
+      const historyMessage = createHistoryMessage(payload.chatID, loggedUserID, messageText);
+      dispatch(messagesActions.sendMessage(historyMessage));
+      const socketMessage = createSocketMessage(
+        onlineUsers,
+        payload.chatID,
+        companionID,
+        loggedUserID,
+        messageText
+      );
+      dispatch(socketActions.sendMessage(socketMessage));
+      dispatch(chatsActions.setChats(loggedUserID));
+      setMessageText('');
+      return;
+    }
+    const historyMessage = createHistoryMessage(chatID, loggedUserID, messageText);
+    dispatch(messagesActions.sendMessage(historyMessage));
     const socketMessage = createSocketMessage(
       onlineUsers,
       chatID,
@@ -27,8 +47,6 @@ export default function ConversationFooter() {
       messageText
     );
     dispatch(socketActions.sendMessage(socketMessage));
-    const historyMessage = createHistoryMessage(chatID, loggedUserID, messageText);
-    dispatch(messagesActions.sendMessage(historyMessage));
     setMessageText('');
   };
 
@@ -36,7 +54,7 @@ export default function ConversationFooter() {
     <div className={styles.conversationFooter}>
       <div className={styles.attachmentWrapper}>
         <IconButton sx={{ p: 0 }}>
-          <AttachmentOutlinedIcon />
+          <InsertEmoticonIcon />
         </IconButton>
       </div>
       <form className={styles.messageForm} onSubmit={sendMessageHandler}>

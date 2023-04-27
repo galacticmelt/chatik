@@ -7,7 +7,8 @@ export const normalizeChats = (currentUserId: string, chats: RawChat[]): Normali
     const normalizedChat = {
       chatID: chat._id,
       companionID: companion._id,
-      companionName: companion.username
+      companionName: companion.username,
+      lastMessage: chat.lastMessage
     };
     return normalizedChat;
   });

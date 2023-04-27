@@ -1,36 +1,30 @@
-import { responseHandler } from '../shared/helpers';
 import { API_ROUTES } from '../shared/constants';
 import { OutcomingHistoryMessage } from '../store/features/messages/messages.types';
+import { HTTPError } from 'ky';
+import { bearerRequest } from './templates';
 
 export const fetchMessages = async (chatId: string) => {
   try {
-    const res = await fetch(API_ROUTES.MESSAGES + chatId);
-    const data = await responseHandler(res);
-    return data;
+    return await bearerRequest.get(API_ROUTES.MESSAGES_GET + chatId).json();
   } catch (err: unknown) {
-    if (err instanceof Error) {
-      console.log(err.name + ': ' + err.message);
+    if (err instanceof HTTPError) {
       throw err;
     }
+    console.log(err);
   }
 };
 
 export const postMessage = async (message: OutcomingHistoryMessage) => {
   try {
-    console.log(message);
-    const res = await fetch(API_ROUTES.MESSAGES_POST, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json;charset=utf-8'
-      },
-      body: JSON.stringify(message)
-    });
-    const data = await responseHandler(res);
-    return data;
+    return await bearerRequest
+      .post(API_ROUTES.MESSAGES_POST, {
+        body: JSON.stringify(message)
+      })
+      .json();
   } catch (err: unknown) {
-    if (err instanceof Error) {
-      console.log(err.name + ': ' + err.message);
+    if (err instanceof HTTPError) {
       throw err;
     }
+    console.log(err);
   }
 };

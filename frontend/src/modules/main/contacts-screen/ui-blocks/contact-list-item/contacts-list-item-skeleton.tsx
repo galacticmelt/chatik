@@ -7,9 +7,9 @@ export default function ContactsListItemSkeleton() {
       <div className={styles.avatarWrapper}>
         <Skeleton variant="circular" sx={{ height: 1, width: 1 }} />
       </div>
-      <div className={styles.contactNameAndStatus}>
-        <Skeleton width={200} height={28} />
-        <Skeleton width={200} height={28} />
+      <div className={styles.nameAndLastMessage}>
+        <Skeleton height={28} />
+        <Skeleton height={28} />
       </div>
     </div>
   );

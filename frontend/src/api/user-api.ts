@@ -1,35 +1,41 @@
-import ky, { HTTPError } from 'ky';
+import { HTTPError } from 'ky';
 import { API_ROUTES } from '../shared/constants';
-import { refreshAccess } from './auth-api';
+import { IUserSignUp } from '../shared/types';
+import { basicRequest, bearerRequest } from './templates';
+
+export const registerUser = async (user: IUserSignUp) => {
+  try {
+    return await basicRequest
+      .post(API_ROUTES.USERS, {
+        body: JSON.stringify(user)
+      })
+      .json();
+  } catch (err: unknown) {
+    if (err instanceof HTTPError) {
+      throw err;
+    }
+    console.log(err);
+  }
+};
 
 export const fetchUserById = async (id: string) => {
   try {
-    await new Promise((resolve) => setTimeout(resolve, 5000));
-    const accessToken = sessionStorage.getItem('accessToken');
-    const data = await ky
-      .get(API_ROUTES.USERS + id, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        },
-        retry: {
-          statusCodes: [401],
-          limit: 5
-        },
-        hooks: {
-          beforeRetry: [
-            async ({ request, options, error, retryCount }) => {
-              const newToken = await refreshAccess();
-              request.headers.set('Authorization', `Bearer ${newToken}`);
-            }
-          ]
-        }
-      })
-      .json();
-    return data;
+    return await bearerRequest.get(API_ROUTES.USERS + id).json();
   } catch (err: unknown) {
     if (err instanceof HTTPError) {
-      const jsonErr = await err.response.json();
-      throw jsonErr;
+      throw err;
     }
+    console.log(err);
+  }
+};
+
+export const fetchAllUsers = async () => {
+  try {
+    return await bearerRequest(API_ROUTES.USERS).json();
+  } catch (err: unknown) {
+    if (err instanceof HTTPError) {
+      throw err;
+    }
+    console.log(err);
   }
 };

@@ -1,16 +1,29 @@
-import { responseHandler } from '../shared/helpers';
 import { API_ROUTES } from '../shared/constants';
+import { HTTPError } from 'ky';
+import { bearerRequest } from './templates';
 
 export const fetchChats = async (userId: string) => {
   try {
-    await new Promise((resolve) => setTimeout(resolve, 5000));
-    const res = await fetch(API_ROUTES.CHATS + userId);
-    const data = await responseHandler(res);
-    return data;
+    return await bearerRequest(API_ROUTES.CHATS_GET + userId).json();
   } catch (err: unknown) {
-    if (err instanceof Error) {
-      console.log(err.name + ': ' + err.message);
+    if (err instanceof HTTPError) {
       throw err;
     }
+    console.log(err);
+  }
+};
+
+export const createChat = async (users: string[]) => {
+  try {
+    return await bearerRequest
+      .post(API_ROUTES.CHATS_POST, {
+        body: JSON.stringify({ users })
+      })
+      .json();
+  } catch (err: unknown) {
+    if (err instanceof HTTPError) {
+      throw err;
+    }
+    console.log(err);
   }
 };

@@ -1,24 +1,12 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { fetchUserById } from '../../../api/user-api';
+import { createSlice } from '@reduxjs/toolkit';
 import { UserState } from './user.types';
-
-const setUser = createAsyncThunk('auth/setUser', async (id: string, { rejectWithValue }) => {
-  try {
-    const user = await fetchUserById(id);
-    return user;
-  } catch (e) {
-    if (e instanceof Error) {
-      console.log(e.message);
-      return rejectWithValue(e.name + ': ' + e.message);
-    }
-  }
-});
+import { setUser } from './user.thunks';
 
 const userSlice = createSlice({
   name: 'user',
   initialState: {
     user: {},
-    isLoading: false,
+    userLoading: false,
     userError: {
       status: false,
       value: null
@@ -31,15 +19,15 @@ const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(setUser.pending, (state) => {
-      state.isLoading = true;
+      state.userLoading = true;
     });
     builder.addCase(setUser.fulfilled, (state, action) => {
-      state.isLoading = false;
+      state.userLoading = false;
       state.user = action.payload.user;
     });
     builder.addCase(setUser.rejected, (state, action) => {
       state.userError.status = true;
-      state.userError.value = action.payload;
+      state.userError.value = action.payload.message;
     });
   }
 });

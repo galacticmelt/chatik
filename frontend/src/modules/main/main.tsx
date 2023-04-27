@@ -5,6 +5,7 @@ import ContactsScreen from './contacts-screen/contacts-screen';
 import { userActions } from '../../store/features/user/user.slice';
 import { chatsActions } from '../../store/features/chats/chats.slice';
 import { socketActions } from '../../store/features/socket/socket.slice';
+import { messagesActions } from '../../store/features/messages/messages.slice';
 import styles from './main.module.scss';
 
 export default function Main() {
@@ -18,6 +19,10 @@ export default function Main() {
     dispatch(socketActions.sendUserId(loggedUserID));
     return () => {
       dispatch(socketActions.unsetSocket());
+      dispatch(userActions.unsetUser());
+      dispatch(chatsActions.unsetChats());
+      dispatch(messagesActions.unsetCurrentChat());
+      dispatch(socketActions.unsetLiveMessages());
     };
   }, []);
 
