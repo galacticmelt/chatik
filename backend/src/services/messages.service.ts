@@ -6,16 +6,16 @@ interface IMessage {
   text: string
 }
 
-const createMessageSRV = (message: IMessage) => {
+const createMessage = (message: IMessage) => {
   return Message.create(message)
 }
 
-const getMessagesByChatSRV = (chatId: string) => {
+const getMessagesByChat = (chatId: string) => {
   return Message.find({chatId})
 }
 
-const deleteMessageSRV = (messageId: string) => {
+const deleteMessage = (messageId: string) => {
   return Message.find({messageId})
 }
 
-export { createMessageSRV, getMessagesByChatSRV, deleteMessageSRV }
+export const messagesServices = { createMessage, getMessagesByChat, deleteMessage }

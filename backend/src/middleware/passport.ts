@@ -1,12 +1,11 @@
 import passport from 'passport';
 import { Strategy as BearerStrategy } from 'passport-http-bearer';
 import jwt from 'jsonwebtoken';
-import env from '../environment.js';
 import { NextFunction, Request, Response } from 'express';
 
 passport.use(new BearerStrategy(
   async (authToken, done) => {
-    await jwt.verify(authToken, env.jwtAccessSign, (err, decoded) => {
+    await jwt.verify(authToken, process.env.JWT_ACCESS_SIGN!, (err, decoded) => {
       if(err) {
         return done(err);
       }

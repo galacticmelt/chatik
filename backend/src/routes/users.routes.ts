@@ -1,41 +1,44 @@
 import express from "express";
 import { body } from 'express-validator';
 import { validationResultHandler } from "../middleware/validationResultHandler.js";
-import { notFoundHandler } from "../middleware/notFoundHandler.js";
 import { bearerPassport } from "../middleware/passport.js";
 import { tryCatch } from "../helpers/tryCatch.js";
-import { 
-  getUserByParams, getUserById, createUser, updateUser, deleteUser 
-} from "../controllers/users.controllers.js";
+import { usersControllers } from "../controllers/users.controllers.js";
 
 
 const router = express.Router()
 
 router.get('/',
   bearerPassport,
-  tryCatch(getUserByParams)
+  tryCatch(usersControllers.getUserByParams)
 )
 
 router.get('/:userId',
   bearerPassport,
-  tryCatch(getUserById)
+  tryCatch(usersControllers.getUserById)
 )
 
 router.post('/', 
+  body('username', 'username is require').notEmpty(),
   body('email', 'email is required').notEmpty(),
+  body('email', 'invalid email format').isEmail(),
   body('password', 'password is required').notEmpty(),
+  body(
+    'password', 
+    'password should be min 5 and max 25 symbols in length'
+    )
+    .isLength({min: 5, max: 25}
+  ),
   validationResultHandler,
-  tryCatch(createUser)
+  tryCatch(usersControllers.createUser)
 )
 
 router.patch('/:userId',
-  tryCatch(updateUser)
+  tryCatch(usersControllers.updateUser)
 )
 
 router.delete('/:userId',
-  tryCatch(deleteUser)
+  tryCatch(usersControllers.deleteUser)
 )
-
-router.use(notFoundHandler)
 
 export default router;

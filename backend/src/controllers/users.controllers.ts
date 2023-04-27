@@ -1,53 +1,51 @@
 import { NextFunction, Request, Response } from "express";
 import bcrypt from "bcrypt";
-import { 
-  getUserByParamsSRV, 
-  getUserByIdSRV,
-  createUserSRV, 
-  deleteUserSRV, 
-  updateUserSRV 
-} from "../services/users.services.js";
+import { usersServices } from "../services/users.services.js";
 
-export const getUserByParams = async (req: Request, res: Response) => {
-  const user = await getUserByParamsSRV(req.body);
+const getUserByParams = async (req: Request, res: Response) => {
+  const user = await usersServices.getUserByParams(req.body);
   if(!user[0]) {
     return res.status(404).json({error: 'user not found'})
   }
   return res.status(201).json({user: user})
 }
 
-export const getUserById = async (req: Request, res: Response) => {
+const getUserById = async (req: Request, res: Response) => {
   const id = req.params.userId
-  const user = await getUserByIdSRV(id);
+  const user = await usersServices.getUserById(id);
   if(!user) {
     return res.status(404).json({error: 'user not found'})
   }
   return res.status(201).json({user: user})
 }
 
-export const createUser = async (req: Request, res: Response) => {
+const createUser = async (req: Request, res: Response) => {
   const { password } = req.body
   const hashedPass = await bcrypt.hash(password, 10);
-  const user = await createUserSRV({...req.body, password: hashedPass})
+  const user = await usersServices.createUser({...req.body, password: hashedPass})
   return res.status(201).json({created: `user with id '${user.id}'`});
 }
 
-export const updateUser = async (req: Request, res: Response) => {
+const updateUser = async (req: Request, res: Response) => {
   const id = req.params.userId
   const updates = req.body
-  const user = await updateUserSRV(id, updates)
+  const user = await usersServices.updateUser(id, updates)
   if(!user) {
     return res.status(404).json({error: `user not found`})
   }
   return res.status(201).json({updated: `user with id '${id}'`});
 }
 
-export const deleteUser = async (req: Request, res: Response) => {
+const deleteUser = async (req: Request, res: Response) => {
   const id = req.params.userId
-  const deleted = await deleteUserSRV(id)
+  const deleted = await usersServices.deleteUser(id)
   if(!deleted) {
     return res.status(404).json({error: `user not found`})
   }
   return res.status(201).json({deleted: `user with id '${id}'`})
+}
+
+export const usersControllers = {
+  getUserByParams, getUserById, createUser, updateUser, deleteUser  
 }
 

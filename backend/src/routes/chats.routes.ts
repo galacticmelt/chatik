@@ -1,15 +1,28 @@
 import express from "express";
-import { body, cookie } from 'express-validator';
+import { body, cookie, param } from 'express-validator';
 import { validationResultHandler } from "../middleware/validationResultHandler.js";
 import { tryCatch } from "../helpers/tryCatch.js";
-import { createChatCTRL, getChatsByUserCTRL, deleteChatCTRL } from "../controllers/chats.controllers.js";
+import { chatsControllers } from "../controllers/chats.controllers.js";
+import { bearerPassport } from "../middleware/passport.js";
 
 const router = express.Router();
 
-router.post('/', tryCatch(createChatCTRL))
+router.post('/', 
+  bearerPassport,
+  body('users', 'users is required'),
+  validationResultHandler,
+  tryCatch(chatsControllers.createChat)
+);
 
-router.get('/getByUser/:userId', tryCatch(getChatsByUserCTRL))
+router.get('/getByUser/:userId', 
+  bearerPassport,
+  param('userId', 'invalid user id').matches(/^[0-9a-fA-F]{24}$/),
+  tryCatch(chatsControllers.getChatsByUser)
+);
 
-router.delete('/:chatId', tryCatch(deleteChatCTRL))
+router.delete('/:chatId',
+  param('chatId', 'invalid chat id').matches(/^[0-9a-fA-F]{24}$/),
+  tryCatch(chatsControllers.deleteChat)
+);
 
 export default router;
