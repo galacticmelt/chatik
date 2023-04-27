@@ -1,6 +1,6 @@
 import User from "../models/user.model.js"
 
-interface IUser {
+interface IUserCreate {
   username: string,
   email: string,
   password: string
@@ -12,36 +12,36 @@ interface IUserUpdate {
   chats?: string[]
 }
 
-interface IParams {
+interface IUserGetByParams {
   _id?: any,
   username?: string 
   email?: string 
 }
 
-const getUserByParamsSRV = (params: IParams) => {
+const getUserByParams = (params: IUserGetByParams) => {
   return User.find(params)
 }
 
-const getUserByIdSRV = (userId: string) => {
-  return User.findById(userId).populate({path: 'chats'})
+const getUserById = (userId: string) => {
+  return User.findById(userId, { password: 0, chats: 0 })
 }
 
-const createUserSRV = (user: IUser) => {
+const createUser = (user: IUserCreate) => {
   return User.create(user);
 }
 
-const deleteUserSRV = (userId: string) => {
+const deleteUser = (userId: string) => {
   return User.findByIdAndDelete(userId)
 }
 
-const updateUserSRV = (userId: string, update: IUserUpdate) => {
+const updateUser = (userId: string, update: IUserUpdate) => {
   return User.findByIdAndUpdate(userId, update)
 }
 
-export { 
-  getUserByParamsSRV, 
-  getUserByIdSRV, 
-  createUserSRV, 
-  deleteUserSRV, 
-  updateUserSRV 
+export const usersServices = { 
+  getUserByParams, 
+  getUserById, 
+  createUser, 
+  deleteUser, 
+  updateUser 
 }

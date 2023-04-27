@@ -4,28 +4,37 @@ interface IChat {
   users: string[]
 }
 
-const createChatSRV = (chat: IChat) => {
+interface IChatUpdate {
+  lastMessage: string 
+}
+
+const createChat= (chat: IChat) => {
   return Chat.create(chat)
 }
 
-const getChatByIdSRV= (chatId: string) => {
+const getChatById= (chatId: string) => {
   return Chat.findById(chatId)
 }
 
-const getChatsByUserSRV = (userId: string) => {
+const getChatsByUser = (userId: string) => {
   return Chat.find(
     { users: { $in: [userId] } }
-  ).populate({path: 'users', select: 'username'})
+  ).populate({path: 'users', select: 'username'}).populate({path: 'lastMessage'})
 }
 
-const deleteChatSRV = (chatId: string) => {
+const updateChat = (chatId: string, update: IChatUpdate) => {
+  return Chat.findByIdAndUpdate(chatId, update);
+}
+
+const deleteChat = (chatId: string) => {
   return Chat.findByIdAndDelete(chatId)
 }
 
-export { 
-  createChatSRV, 
-  getChatByIdSRV, 
-  getChatsByUserSRV, 
-  deleteChatSRV 
+export const chatsServices = { 
+  createChat, 
+  getChatById, 
+  getChatsByUser,
+  updateChat, 
+  deleteChat 
 }
 
