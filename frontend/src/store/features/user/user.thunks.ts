@@ -7,8 +7,8 @@ export const setUser = createAsyncThunk('auth/setUser', async (id: string, { rej
     return user;
   } catch (e) {
     if (e instanceof Error) {
-      console.log(e.message);
-      return rejectWithValue(e.name + ': ' + e.message);
+      console.log(e.name + ': ' + e.message);
+      return rejectWithValue(e.message);
     }
   }
 });

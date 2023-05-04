@@ -1,17 +1,12 @@
-* {
+:root {
   font-family: Roboto;
+}
+
+* {
   margin: 0;
   box-sizing: border-box;
 }
 
-:root {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: linear-gradient(135deg, #e0e0e0 25%, transparent 40%) -50px 0,
-    linear-gradient(225deg, #e0e0e0 25%, transparent 40%) -50px 0,
-    linear-gradient(315deg, #e0e0e0 25%, transparent 40%),
-    linear-gradient(45deg, #e0e0e0 25%, transparent 40%);
-  background-size: 100px 100px;
-  background-color: #eee;
+body {
+  background-color: rgb(209, 205, 205);
 }

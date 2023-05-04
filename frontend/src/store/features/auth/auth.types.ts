@@ -1,18 +1,13 @@
-export interface ILogInPayload {
+export interface LogInPayload {
   accessToken: string;
   userId: string;
 }
 
-export interface ILogInInputs {
-  email: string;
-  password: string;
-}
-
 export type AuthState = {
-  loggedUserID: string;
-  isLoading: boolean;
+  loggedUserId: string;
+  authLoading: boolean;
   authError: {
     status: boolean;
-    value: null | any;
+    value: null | string;
   };
 };

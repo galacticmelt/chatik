@@ -1,7 +1,9 @@
 import { io } from 'socket.io-client';
 import { Middleware } from 'redux';
 import { socketActions } from './socket.slice';
+import { contactsActions } from '../contacts/contacts.slice';
 import { Socket } from 'socket.io-client';
+import { currentChatActions } from '../currentChat/currentChat.slice';
 
 export const socketMiddleware: Middleware = (store) => {
   let socket: Socket;
@@ -18,6 +20,20 @@ export const socketMiddleware: Middleware = (store) => {
       });
       socket.on('newMessage', (message) => {
         store.dispatch(socketActions.setLiveMessages(message));
+        store.dispatch(
+          contactsActions.setSocketLastMessage({
+            chatId: message.chatId,
+            socketMessage: message
+          })
+        );
+      });
+      socket.on('contactsChanged', ({ updateType, initiatorId }) => {
+        const { loggedUserId } = store.getState().auth;
+        const { companionId } = store.getState().currentChat;
+        if (updateType === 'delete' && companionId === initiatorId) {
+          store.dispatch(currentChatActions.unsetCurrentChat());
+        }
+        store.dispatch(contactsActions.setContacts(loggedUserId));
       });
     }
     if (socketActions.unsetSocket.match(action)) {
@@ -35,6 +51,20 @@ export const socketMiddleware: Middleware = (store) => {
         message: message
       });
       return;
+    }
+    if (socketActions.notifyAboutContactsUpd.match(action)) {
+      const { companionId, updateType } = action.payload;
+      const { loggedUserId } = store.getState().auth;
+      const { onlineUsers } = store.getState().socket;
+      const isOnline = onlineUsers.filter((user) => user.userId === companionId);
+      if (isOnline[0]) {
+        socket.emit('contactsUpdate', {
+          receiverId: isOnline[0].socketId,
+          initiatorId: loggedUserId,
+          updateType
+        });
+        return;
+      }
     }
     return next(action);
   };

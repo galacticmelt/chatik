@@ -1,29 +1,18 @@
 import { API_ROUTES } from '../shared/constants';
-import { HTTPError } from 'ky';
 import { bearerRequest } from './templates';
 
 export const fetchChats = async (userId: string) => {
-  try {
-    return await bearerRequest(API_ROUTES.CHATS_GET + userId).json();
-  } catch (err: unknown) {
-    if (err instanceof HTTPError) {
-      throw err;
-    }
-    console.log(err);
-  }
+  return await bearerRequest.get(API_ROUTES.CHATS_GET_BY_USER + userId).json();
 };
 
 export const createChat = async (users: string[]) => {
-  try {
-    return await bearerRequest
-      .post(API_ROUTES.CHATS_POST, {
-        body: JSON.stringify({ users })
-      })
-      .json();
-  } catch (err: unknown) {
-    if (err instanceof HTTPError) {
-      throw err;
-    }
-    console.log(err);
-  }
+  return await bearerRequest
+    .post(API_ROUTES.CHATS_ROOT, {
+      body: JSON.stringify({ users })
+    })
+    .json();
+};
+
+export const deleteChat = async (chatId: string) => {
+  return await bearerRequest.delete(API_ROUTES.CHATS_ROOT + chatId).json();
 };

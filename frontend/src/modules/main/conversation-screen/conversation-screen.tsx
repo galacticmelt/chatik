@@ -1,23 +1,23 @@
-import ConversationFooter from './ui-blocks/conversation-footer/conversation-footer';
-import ConversationHeader from './ui-blocks/conversation-header/conversation-header';
-import ConversationMain from './ui-blocks/conversation-main/conversation-main';
+import ConversationFooter from './conversation-footer/conversation-footer';
+import ConversationHeader from './conversation-header/conversation-header';
+import ConversationMain from './conversation-main/conversation-main';
 import { Typography, CircularProgress } from '@mui/material';
-import styles from './conversation-screen.module.scss';
 import { useAppSelector } from '../../../store/hooks';
+import styles from './conversation-screen.module.scss';
 
 export default function ConversationScreen() {
-  const { chatID } = useAppSelector((state) => state.messages);
-  const { user, userError, isLoading } = useAppSelector((state) => state.user);
+  const { chatId } = useAppSelector((state) => state.currentChat);
+  const { user, userLoading } = useAppSelector((state) => state.user);
 
   return (
     <div className={styles.conversationScreen}>
-      {chatID ? (
+      {chatId ? (
         <>
           <ConversationHeader />
           <ConversationMain />
           <ConversationFooter />
         </>
-      ) : isLoading ? (
+      ) : userLoading ? (
         <CircularProgress size={60} />
       ) : (
         <Typography variant="h3" sx={{ textAlign: 'center' }}>

@@ -1,12 +1,12 @@
-import { IncomingHistoryMessage } from '../store/features/messages/messages.types';
+import { IncomingHistoryMessage } from '../store/features/currentChat/currentChat.types';
 
-export interface IUserSignUp {
-  username: string;
+export interface LogInData {
   email: string;
   password: string;
 }
 
-export interface IUserLogIn {
+export interface SignUpData {
+  username: string;
   email: string;
   password: string;
 }

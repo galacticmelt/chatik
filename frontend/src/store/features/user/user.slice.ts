@@ -19,6 +19,8 @@ const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(setUser.pending, (state) => {
+      state.userError.status = false;
+      state.userError.value = '';
       state.userLoading = true;
     });
     builder.addCase(setUser.fulfilled, (state, action) => {
@@ -26,8 +28,9 @@ const userSlice = createSlice({
       state.user = action.payload.user;
     });
     builder.addCase(setUser.rejected, (state, action) => {
+      state.userLoading = false;
       state.userError.status = true;
-      state.userError.value = action.payload.message;
+      state.userError.value = action.payload;
     });
   }
 });
