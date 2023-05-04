@@ -19,7 +19,7 @@ router.get('/:userId',
 )
 
 router.post('/', 
-  body('username', 'username is require').notEmpty(),
+  body('username', 'username is required').notEmpty(),
   body('email', 'email is required').notEmpty(),
   body('email', 'invalid email format').isEmail(),
   body('password', 'password is required').notEmpty(),
@@ -34,10 +34,12 @@ router.post('/',
 )
 
 router.patch('/:userId',
+  bearerPassport,
   tryCatch(usersControllers.updateUser)
 )
 
 router.delete('/:userId',
+  bearerPassport,
   tryCatch(usersControllers.deleteUser)
 )
 

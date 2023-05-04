@@ -21,6 +21,7 @@ router.get('/getByUser/:userId',
 );
 
 router.delete('/:chatId',
+  bearerPassport,
   param('chatId', 'invalid chat id').matches(/^[0-9a-fA-F]{24}$/),
   tryCatch(chatsControllers.deleteChat)
 );

@@ -18,9 +18,12 @@ const getMessagesByChat = async (req: Request, res: Response) => {
 const deleteMessage = async (req: Request, res: Response) => {
   const messageId = req.params.messageId
   const deleted = messagesServices.deleteMessage(messageId)
-  if(!deleted) {
-    return res.status(404).json({error: 'message not found'})
-  }
+  return res.status(201).json({deleted: `message, id: ${deleted}`})
+}
+
+const deleteMessagesByChat = async (req: Request, res: Response) => {
+  const deleted = messagesServices.deleteMessage(req.params.chatId)
+  return res.status(201).json({deleted: `, id: ${deleted}`})
 }
 
 export const messagesControllers = { createMessage, getMessagesByChat, deleteMessage }

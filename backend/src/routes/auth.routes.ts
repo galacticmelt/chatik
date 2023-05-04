@@ -1,5 +1,5 @@
 import express from "express";
-import { body, cookie } from 'express-validator';
+import { body } from 'express-validator';
 import { validationResultHandler } from "../middleware/validationResultHandler.js";
 import { tryCatch } from "../helpers/tryCatch.js";
 import { authControllers } from "../controllers/auth.controllers.js";
