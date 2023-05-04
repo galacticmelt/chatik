@@ -28,6 +28,9 @@ const socketSlice = createSlice({
     },
     sendMessage(state, action) {
       return state;
+    },
+    notifyAboutContactsUpd(state, action) {
+      return state;
     }
   }
 });
@@ -39,7 +42,8 @@ export const socketActions = {
   setLiveMessages: socketSlice.actions.setLiveMessages,
   unsetLiveMessages: socketSlice.actions.unsetLiveMessages,
   sendUserId: socketSlice.actions.sendUserId,
-  sendMessage: socketSlice.actions.sendMessage
+  sendMessage: socketSlice.actions.sendMessage,
+  notifyAboutContactsUpd: socketSlice.actions.notifyAboutContactsUpd
 };
 
 export default socketSlice.reducer;

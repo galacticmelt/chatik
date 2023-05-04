@@ -1,25 +1,51 @@
-import { TextField, Typography, Button } from '@mui/material';
-import { memo } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { TextField, Typography, Button, CircularProgress } from '@mui/material';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { emailValidation, passValidation } from './signup-validation';
-import { ISignUpFormProps, ISignUpFormInputs } from './signup-form.types';
+import { emailValidation, passValidation } from '../shared/constants';
+import { SignUpData } from '../../../shared/types';
+import { registerUser } from '../../../api/user-api';
 import styles from './signup-form.module.scss';
 
-const SignUpForm: React.FC<ISignUpFormProps> = ({ submitFunc }: ISignUpFormProps) => {
+export default function SignUpForm() {
+  const [regLoading, setRegLoading] = useState(false);
+  const [regSuccess, setRegSuccess] = useState(false);
+  const [regError, setRegError] = useState<string | null>(null);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (regSuccess) {
+      setTimeout(() => navigate('/'), 3000);
+    }
+  }, [regSuccess]);
+
   const {
     register,
     handleSubmit,
     formState: { errors }
-  } = useForm<ISignUpFormInputs>({ reValidateMode: 'onChange' });
+  } = useForm<SignUpData>({ reValidateMode: 'onChange' });
 
-  const onSubmit: SubmitHandler<ISignUpFormInputs> = (data) => {
+  const onSubmit: SubmitHandler<SignUpData> = async (data) => {
+    setRegError(null);
     const user = {
       username: data.username,
       email: data.email,
       password: data.password
     };
-    console.log(user);
-    submitFunc(user);
+    setRegLoading(true);
+    try {
+      const res = await registerUser(user);
+      if (res) {
+        setRegLoading(false);
+        setRegSuccess(true);
+      }
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        setRegLoading(false);
+        setRegError(e.message);
+      }
+    }
   };
 
   return (
@@ -53,11 +79,27 @@ const SignUpForm: React.FC<ISignUpFormProps> = ({ submitFunc }: ISignUpFormProps
         helperText={errors.password?.message}
         autoComplete="off"
       />
-      <Button type="submit" variant="contained">
+      {regError && (
+        <Typography variant="caption" color="error">
+          Whoops! {regError}
+        </Typography>
+      )}
+      <Button type="submit" variant="contained" disabled={regLoading}>
         Submit
       </Button>
+      {regLoading && (
+        <CircularProgress
+          size={20}
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            marginTop: '-10px',
+            marginLeft: '-10px'
+          }}
+        />
+      )}
+      {regSuccess && <Typography>Signed up! Redirecting to Log in page...</Typography>}
     </form>
   );
-};
-
-export default memo(SignUpForm);
+}

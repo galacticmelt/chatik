@@ -8,9 +8,10 @@ export const basicRequest = ky.create({
   hooks: {
     beforeError: [
       async (err) => {
-        if (err.response) {
-          const json = await err.response.json();
-          err.message = json.error;
+        const { response } = err;
+        if (response) {
+          const json = await response.json();
+          err.message = `${response.status}: ${json.error}`;
         }
         return err;
       }
@@ -20,6 +21,7 @@ export const basicRequest = ky.create({
 
 export const bearerRequest = basicRequest.extend({
   retry: {
+    methods: ['get', 'post', 'delete'],
     statusCodes: [401],
     limit: 5
   },

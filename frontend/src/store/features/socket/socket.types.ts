@@ -10,7 +10,7 @@ export type SocketUser = {
 
 export type LiveMessage = {
   id: string;
-  chatID: string;
+  chatId: string;
   sender: string;
   text: string;
   createdAt: Date;
