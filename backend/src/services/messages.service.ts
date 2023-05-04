@@ -11,11 +11,15 @@ const createMessage = (message: IMessage) => {
 }
 
 const getMessagesByChat = (chatId: string) => {
-  return Message.find({chatId})
+  return Message.find({chatId}).sort({ "createdAt": 1 })
 }
 
 const deleteMessage = (messageId: string) => {
-  return Message.find({messageId})
+  return Message.findByIdAndDelete(messageId)
 }
 
-export const messagesServices = { createMessage, getMessagesByChat, deleteMessage }
+const deleteMessagesByChat = (chatId: string) => {
+  return Message.deleteMany({chatId})
+}
+
+export const messagesServices = { createMessage, getMessagesByChat, deleteMessage, deleteMessagesByChat }

@@ -39,6 +39,14 @@ const socketServer = (server: http.Server) => {
         message.message
       )
     })
+    socket.on('contactsUpdate', ({receiverId, initiatorId, updateType}) => {
+      console.log(`rec ${receiverId} init ${initiatorId} type ${updateType}`)
+      if (updateType === 'delete') {
+        io.to(receiverId).emit('contactsChanged', {updateType: 'delete', initiatorId})
+        return;
+      }
+      io.to(receiverId).emit('contactsChanged', {updateType: 'add', initiatorId: ''})
+    })
     socket.on('disconnect', () => {
       console.log(`${socket.id} disconnected`)
       removeUser(socket.id);

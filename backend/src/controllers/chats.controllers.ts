@@ -2,8 +2,10 @@ import { NextFunction, Request, Response } from "express";
 import Chat from "../models/chat.model.js";
 import User from "../models/user.model.js";
 import { chatsServices } from "../services/chats.services.js";
+import { messagesServices } from "../services/messages.service.js";
+import { DocExistsError } from "../errors.js";
 
-const createChat = async (req: Request, res: Response) => {
+const createChat = async (req: Request, res: Response, next: NextFunction) => {
   const users = req.body.users
   const duplicate = await Chat.find({
     $and: [
@@ -12,7 +14,7 @@ const createChat = async (req: Request, res: Response) => {
     ]
   })
   if(duplicate[0]) {
-    return res.status(400).json({error: 'chat between these users already exists'})
+    next(new DocExistsError('chat between these users already exists'));
   }
   let newChat = await chatsServices.createChat({users: [...users]})
   newChat = await newChat.populate({path: 'users', select: 'username'});
@@ -30,10 +32,8 @@ const getChatsByUser = async (req: Request, res: Response) => {
 
 const deleteChat = async (req: Request, res: Response) => {
   const chatId = req.params.chatId
-  const chat = await chatsServices.deleteChat(chatId)
-  if(!chat) {
-    return res.status(404).json({error: 'chat not found'})
-  }
+  await messagesServices.deleteMessagesByChat(chatId);
+  const chat = await chatsServices.deleteChat(chatId);
   return res.status(201).json({deleted: `chat with id '${chatId}'`})
 }
 
